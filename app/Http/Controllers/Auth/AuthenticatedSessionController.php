@@ -68,6 +68,10 @@ class AuthenticatedSessionController extends Controller
             return;
         }
 
+        if (Auth::user()->login_limit_number === null) {
+            return false;
+        }
+
         $userLoginCount = DB::connection(config('session.connection'))->table(config('session.table', 'sessions'))
             ->where('user_id', Auth::user()->getAuthIdentifier())
             ->orderBy('last_activity', 'desc')
